@@ -30,9 +30,9 @@
 
     * sudo nano /etc/systemd/system/prometheus.service
 <details>
-
 <summary>prometheus.service</summary>
 
+```
 [Unit]
 Description=Prometheus
 Wants=network-online.target
@@ -49,6 +49,7 @@ ExecStart=/usr/local/bin/prometheus \
 
 [Install]
 WantedBy=multi-user.target
+```
 
 </details>
 
@@ -82,9 +83,9 @@ WantedBy=multi-user.target
 
     * sudo nano /etc/systemd/system/node-exporter.service
 <details>
-
 <summary>node-exporter.service</summary>
 
+```
 [Unit]
 Description=Node Exporter Lesson 9.4
 After=network.target
@@ -97,6 +98,7 @@ ExecStart=/etc/prometheus/node-exporter/node_exporter
 
 [Install]
 WantedBy=multi-user.target
+```
 
 </details>
 
