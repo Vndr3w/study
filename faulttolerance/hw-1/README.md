@@ -70,22 +70,22 @@ cd /usr/local/bin/
 <summary> check_web.sh </summary>
 
 ```
-#!/bin/bash
-PORT=80
-WEBROOT=/var/www/html
-INDEX_FILE=$WEBROOT/index.html
+	#!/bin/bash
+	PORT=80
+	WEBROOT=/var/www/html
+	INDEX_FILE=$WEBROOT/index.html
 
-# Проверка порта (bash /dev/tcp)
-if ! timeout 1 bash -c "cat < /dev/null > /dev/tcp/localhost/$PORT" 2>/dev/null; then
-    exit 1
-fi
+	# Проверка порта (bash /dev/tcp)
+	if ! timeout 1 bash -c "cat < /dev/null > /dev/tcp/localhost/$PORT" 2>/dev/null; then
+	    exit 1
+	fi
 
-# Проверка файла index.html
-if [ ! -f "$INDEX_FILE" ]; then
-    exit 1
-fi
+	# Проверка файла index.html
+	if [ ! -f "$INDEX_FILE" ]; then
+	    exit 1
+	fi
 
-exit 0
+	exit 0
 ```
 </details>
 
@@ -95,34 +95,34 @@ sudo nano /etc/keepalived/keepalived.conf
 <summary> keepalived.conf </summary>
 
 ```
-global_defs {
-    router_id LVS_DEVEL
-}
+	global_defs {
+	    router_id LVS_DEVEL
+	}
 
-vrrp_script check_web {
-    script "/usr/local/bin/check_web.sh"
-    interval 3
-    fall 2
-    rise 2
-}
+	vrrp_script check_web {
+	    script "/usr/local/bin/check_web.sh"
+	    interval 3
+	    fall 2
+	    rise 2
+	}
 
-vrrp_instance VI_1 {
-    interface enp0s8 # Указываем свой интерфейс, ip a
-    state MASTER # Сменить на BACKUP
-    virtual_router_id 100 # Указываем последний октет виртуальной сети
-    priority 200 # Понизить приоритет на BACKUP
-    advert_int 1
-    authentication {
-        auth_type PASS
-        auth_pass secret
-    }
-    virtual_ipaddress {
-        192.168.56.100/24 
-    }
-    track_script {
-        check_web
-    }
-}
+	vrrp_instance VI_1 {
+	    interface enp0s8 # Указываем свой интерфейс, ip a
+	    state MASTER # Сменить на BACKUP
+	    virtual_router_id 100 # Указываем последний октет виртуальной сети
+	    priority 200 # Понизить приоритет на BACKUP
+	    advert_int 1
+	    authentication {
+	        auth_type PASS
+	        auth_pass secret
+	    }
+	    virtual_ipaddress {
+	        192.168.56.100/24 
+	    }
+	    track_script {
+	        check_web
+	    }
+	}
 
 ```
 </details>
@@ -136,11 +136,11 @@ sudo systemctl restart keepalived
 
 [Конфигурационный файл keepalived](keepalived.conf)
 
-![vm-1](img/img2.1)
+![vm-1](img/img2.1.png)
 
-![vm-2](img/img2.2)
+![vm-2](img/img2.2.png)
 
-![vm-1](img/img2.3)
+![vm-1](img/img2.3.png)
 
 ## Задание 3*
 - Изучите дополнительно возможность Keepalived, которая называется vrrp_track_file
