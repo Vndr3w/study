@@ -66,10 +66,10 @@ sudo chmod +x /usr/local/bin/check_web.sh
 cd /usr/local/bin/
 ./check_web.sh 
 
-<details>
-<summary> check_web.sh </summary>
+	<details>
+	<summary> check_web.sh </summary>
 
-```
+	```
 	#!/bin/bash
 	PORT=80
 	WEBROOT=/var/www/html
@@ -86,15 +86,15 @@ cd /usr/local/bin/
 	fi
 
 	exit 0
-```
-</details>
+	```
+	</details>
 
 sudo nano /etc/keepalived/keepalived.conf
 
-<details>
-<summary> keepalived.conf </summary>
+	<details>
+	<summary> keepalived.conf </summary>
 
-```
+	```
 	global_defs {
 	    router_id LVS_DEVEL
 	}
@@ -124,8 +124,8 @@ sudo nano /etc/keepalived/keepalived.conf
 	    }
 	}
 
-```
-</details>
+	```
+	</details>
 
 sudo systemctl restart keepalived
 
