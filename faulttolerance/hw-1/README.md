@@ -141,7 +141,79 @@ wr
 ## Задание 3*
 - Изучите дополнительно возможность Keepalived, которая называется vrrp_track_file
 - Напишите bash-скрипт, который будет менять приоритет внутри файла в зависимости от нагрузки на виртуальную машину (можно разместить данный скрипт в cron и запускать каждую минуту). Рассчитывать приоритет можно, например, на основании Load average.
+	- sudo nano /usr/local/bin/keepalived_load.sh
+		<details>
+		<summary>keepalived_load.sh</summary>
+
+		```bash
+		#!/usr/bin/env bash
+
+		TRACK_FILE="/var/run/keepalived_load"
+
+		# 1‑минутный load average
+		LOAD_1M=$(cut -d' ' -f1 /proc/loadavg)
+
+		# Максимальное «штрафное» значение (по модулю)
+		MAX_PENALTY=50
+
+		# Простая формула: чем выше load, тем ниже приоритет.
+		# Например: priority_delta = 50 - (LOAD_1M * 10)
+		# При маленьком load (0.2) ~ 48, при большом (5.0) ~ 0 или ниже.
+		PRIO_DELTA=$(awk -v l="$LOAD_1M" -v max="$MAX_PENALTY" 'BEGIN{
+		v = max - int(l * 10);
+		if (v < -max) v = -max;
+		if (v > max) v = max;
+		print v
+		}')
+
+		# Обеспечим существование каталога
+		mkdir -p "$(dirname "$TRACK_FILE")"
+
+		# Записываем число в файл
+		echo "$PRIO_DELTA" > "$TRACK_FILE"
+		```
+		</details>
+	- sudo chmod +x /usr/local/bin/keepalived_load.sh
+	- sudo crontab -e
+	- `* * * * * /usr/local/bin/keepalived_load.sh >/dev/null 2>&1`
+
 - Настройте Keepalived на отслеживание данного файла.
+	- sudo nano /etc/keepalived/keepalived.conf
+		<details>
+		<summary>keepalived.conf</summary>
+
+		```bash
+		vrrp_track_file load_track {
+			file "/var/run/keepalived_load"
+			}
+
+		vrrp_instance VI_1 {
+			state MASTER # BACKUP для второго сервера
+			interface enp0s8 
+			virtual_router_id 100
+			priority 200 # Понизить приоритет для второго сервера
+			advert_int 1
+
+			authentication {
+				auth_type PASS
+				auth_pass 12345
+			}
+
+			virtual_ipaddress {
+				192.168.56.100/24 
+			}
+
+			track_file {
+				load_track
+			}
+		}
+
+		```
+		</details>
 - Нагрузите одну из виртуальных машин, которая находится в состоянии MASTER и имеет активный виртуальный IP и проверьте, чтобы через некоторое время она перешла в состояние SLAVE из-за высокой нагрузки и виртуальный IP переехал на другой, менее нагруженный сервер.
+	- sudo apt install stress-ng
+	- stress-ng -c 4 -l 100
 - Попробуйте выполнить настройку keepalived на третьем сервере и скорректировать при необходимости формулу так, чтобы плавающий ip адрес всегда был прикреплен к серверу, имеющему наименьшую нагрузку.
 - На проверку отправьте получившийся bash-скрипт и конфигурационный файл keepalived, а также скриншоты логов keepalived с серверов при разных нагрузках
+
+Доделаю позже.
