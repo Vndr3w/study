@@ -2,15 +2,103 @@
 
 ## Задание 1 
 
-Возьмите за основу [решение к заданию 1 из занятия «Подъём инфраструктуры в Яндекс Облаке»](https://github.com/netology-code/sdvps-homeworks/blob/main/7-03.md#задание-1).
-
-1. Теперь вместо одной виртуальной машины сделайте terraform playbook, который:
+1. Cделайте [terraform playbook](terraform/main.tf), который:
 
 - создаст 2 идентичные виртуальные машины. Используйте аргумент [count](https://www.terraform.io/docs/language/meta-arguments/count.html) для создания таких ресурсов;
+
+    <details>
+    <summary>Использованный код</summary>
+
+    ```bash
+    resource "yandex_compute_instance" "vm" {
+        count = 2
+
+        name = "vm${count.index}"
+        platform_id = "standard-v1"
+
+        boot_disk {
+            
+            initialize_params {
+            image_id = "fd883qojk2a3hruf8p7m"
+            type     = "network-hdd"
+            size     = 10
+            }
+        }
+
+        network_interface {
+            subnet_id          = yandex_vpc_subnet.subnet1.id
+            nat                = true
+        }
+
+        resources {
+            cores         = 2
+            memory        = 1
+            core_fraction = 20
+        }
+
+        scheduling_policy {
+            preemptible = true
+        }
+
+        metadata = {
+            ssh-keys = "ubuntu:${file("~/.ssh/id_ed25519.pub")}"
+        }
+    }
+    ```
+    </details>
+
 - создаст [таргет-группу](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/lb_target_group). Поместите в неё созданные на шаге 1 виртуальные машины;
+
+    <details>
+    <summary>Использованный код</summary>
+
+    ```bash
+    resource "yandex_lb_target_group" "group1" {
+      name = "group1"
+
+      dynamic "target" {
+        for_each = yandex_compute_instance.vm
+        content {
+          subnet_id = yandex_vpc_subnet.subnet1.id
+          address   = target.value.network_interface.0.ip_address
+        }
+      }
+    }
+    ```
+    </details>
+
 - создаст [сетевой балансировщик нагрузки](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/lb_network_load_balancer), который слушает на порту 80, отправляет трафик на порт 80 виртуальных машин и http healthcheck на порт 80 виртуальных машин.
 
-Рекомендуем изучить [документацию сетевого балансировщика нагрузки](https://cloud.yandex.ru/docs/network-load-balancer/quickstart) для того, чтобы было понятно, что вы сделали.
+    <details>
+    <summary>Использованный код</summary>
+
+    ```bash
+    resource "yandex_lb_network_load_balancer" "balancer1" {
+      name                = "balancer1"
+      deletion_protection = "false"
+
+      listener {
+        name = "my-lb1"
+        port = 80
+        external_address_spec {
+          ip_version = "ipv4"
+        }
+      }
+
+    attached_target_group {
+        target_group_id = yandex_lb_target_group.group1.id
+
+        healthcheck {
+          name = "http"
+          http_options {
+            port = 80
+            path = "/"
+          }
+        }
+      }
+    }
+    ```
+    </details>
 
 2. Установите на созданные виртуальные машины пакет Nginx любым удобным способом и запустите Nginx веб-сервер на порту 80.
 
@@ -19,15 +107,15 @@
 - созданный балансировщик находится в статусе Active,
 - обе виртуальные машины в целевой группе находятся в состоянии healthy.
 
+  ![3](img/img3.png)
+
 4. Сделайте запрос на 80 порт на внешний IP-адрес балансировщика и убедитесь, что вы получаете ответ в виде дефолтной страницы Nginx.
 
-*В качестве результата пришлите:*
+  ![4.1](img/img4.1.png)(Запрос к ВМ0)
 
-*1. Terraform Playbook.*
+  ![4.2](img/img4.2.png)(Запрос к ВМ1)
 
-*2. Скриншот статуса балансировщика и целевой группы.*
-
-*3. Скриншот страницы, которая открылась при запросе IP-адреса балансировщика.*
+  ![4.3](img/img4.3.png)(Запрос к балансировщику)
 
 ## Задание 2*
 

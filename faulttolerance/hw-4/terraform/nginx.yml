@@ -1,0 +1,26 @@
+---
+- name: Установка Nginx с кастомной страницей
+  hosts: web
+  become: yes
+
+  tasks:
+    - name: Обновить кэш
+      apt:
+        update_cache: yes
+
+    - name: Установка Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Гарантируем запуск Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Создаём кастомную страницу index.html
+      copy:
+        dest: /var/www/html/index.nginx-debian.html
+        content: |
+          >>>> Это: {{ inventory_hostname }}, её IP {{ ansible_default_ipv4.address }} <<<<
