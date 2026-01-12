@@ -1,0 +1,18 @@
+filebeat.inputs:
+  - type: filestream
+    id: nginx-access
+    enabled: true
+    paths:
+      - /var/log/nginx/access.log
+    prospector.scanner.fingerprint.length: 128
+
+processors:
+  - add_fields:
+      target: nginx
+      fields:
+        via: filebeat
+
+output.elasticsearch:
+  hosts: ["http://elasticsearch:9200"]
+
+setup.ilm.enabled: false
