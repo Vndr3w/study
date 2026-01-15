@@ -1,0 +1,96 @@
+---
+- name: Установить RabbitMQ и создать кластер
+  hosts: rabbitmq
+  become: true
+  vars:
+    rabbitmq_master: "{{ groups['rabbitmq'][0] }}"
+    rabbitmq_erlang_cookie_file: /var/lib/rabbitmq/.erlang.cookie
+
+    # Политика (ha-mode all + automatic sync)
+    rabbitmq_ha_policy_name: ha-all
+    rabbitmq_ha_policy_pattern: ".*"
+    rabbitmq_ha_policy_definition: '{"ha-mode":"all","ha-sync-mode":"automatic"}'
+
+  tasks:
+    - name: Установка RabbitMQ
+      ansible.builtin.apt:
+        name: rabbitmq-server
+        state: present
+        update_cache: true
+
+    - name: Убедиться что RabbitMQ запущен
+      ansible.builtin.service:
+        name: rabbitmq-server
+        state: started
+        enabled: true
+
+    - name: Включить плагин rabbitmq_management
+      community.rabbitmq.rabbitmq_plugin:
+        names: rabbitmq_management
+        state: enabled
+
+    # --- Синхронизация cookie со стартовой ноды ---
+
+    - name: Чтение Erlang cookie на мастере
+      ansible.builtin.command: "cat {{ rabbitmq_erlang_cookie_file }}"
+      register: rabbitmq_erlang_cookie
+      changed_when: false
+      when: inventory_hostname == rabbitmq_master
+
+    - name: Установить факт использования файлов cookie на non-master
+      ansible.builtin.set_fact:
+        rabbitmq_erlang_cookie_value: "{{ hostvars[rabbitmq_master]['rabbitmq_erlang_cookie']['stdout'] }}"
+      when: inventory_hostname != rabbitmq_master
+
+    - name: Остановить RabbitMQ на non-master (перед обновлением файлов cookie)
+      ansible.builtin.service:
+        name: rabbitmq-server
+        state: stopped
+      when: inventory_hostname != rabbitmq_master
+
+    - name: Запиши файл cookie Erlang на non-master
+      ansible.builtin.copy:
+        dest: "{{ rabbitmq_erlang_cookie_file }}"
+        content: "{{ rabbitmq_erlang_cookie_value }}"
+        owner: rabbitmq
+        group: rabbitmq
+        mode: "0400"
+      when: inventory_hostname != rabbitmq_master
+
+    - name: Запусти RabbitMQ на non-master (после обновления cookie)
+      ansible.builtin.service:
+        name: rabbitmq-server
+        state: started
+      when: inventory_hostname != rabbitmq_master
+
+    # --- Кластеризация (выполняем join только на non-master) ---
+
+    - name: Остановить app на non-master
+      ansible.builtin.command: rabbitmqctl stop_app
+      changed_when: false
+      when: inventory_hostname != rabbitmq_master
+
+    - name: Перезапустить app на non-master
+      ansible.builtin.command: rabbitmqctl reset
+      changed_when: false
+      when: inventory_hostname != rabbitmq_master
+
+    - name: Добавить cluster на non-master
+      ansible.builtin.command: "rabbitmqctl join_cluster rabbit@{{ hostvars[rabbitmq_master]['ansible_hostname'] }}"
+      changed_when: false
+      when: inventory_hostname != rabbitmq_master
+
+    - name: Запустить app на non-master
+      ansible.builtin.command: rabbitmqctl start_app
+      changed_when: false
+      when: inventory_hostname != rabbitmq_master
+
+    # --- Политика HA (один раз на master) ---
+
+    - name: Установить ha-all policy на master
+      ansible.builtin.command: >
+        rabbitmqctl set_policy {{ rabbitmq_ha_policy_name }}
+        "{{ rabbitmq_ha_policy_pattern }}"
+        '{{ rabbitmq_ha_policy_definition }}'
+      changed_when: false
+      when: inventory_hostname == rabbitmq_master
