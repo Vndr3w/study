@@ -16,7 +16,6 @@ docker run -d \
   -e POSTGRES_DB=hwdb \
   -p 5432:5432 \
   postgres:18
-
 ```
 
 2. Установить DBeaver
