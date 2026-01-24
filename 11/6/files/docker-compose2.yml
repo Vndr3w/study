@@ -1,0 +1,34 @@
+# Master - Slave
+
+services:
+  mysql-master:
+    image: mysql:8.0
+    container_name: mysql-master
+    command: --server-id=1 --log-bin=mysql-bin --binlog-format=row
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: repl_user
+      MYSQL_PASSWORD: replpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - master-data:/var/lib/mysql
+
+  mysql-slave:
+    image: mysql:8.0
+    container_name: mysql-slave
+    command: --server-id=2
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: testdb
+    ports:
+      - "3307:3306"
+    depends_on:
+      - mysql-master
+    volumes:
+      - slave-data:/var/lib/mysql
+
+volumes:
+  master-data:
+  slave-data:
