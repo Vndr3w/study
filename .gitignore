@@ -1,5 +1,38 @@
-# Игнорировать все папки
-*/
+# Системные файлы Linux/Ubuntu
+.DS_Store
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
 
-# Но не игнорировать текущую папку и файлы в ней
-!*/
+# Временные файлы редакторов
+*.swp
+*.swo
+*~
+*.tmp
+*.temp
+
+# Файлы IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# Python
+__pycache__/
+*.pyc
+.python-version
+.env
+venv/
+env/
+
+# JavaScript/Node.js
+node_modules/
+npm-debug.log*
+
+# Логи
+*.log
+
+# Конфиденциальные данные
+.env
+.secret
