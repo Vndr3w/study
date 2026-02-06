@@ -1,0 +1,24 @@
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  image: docker:latest
+  script:
+    - docker build .
+  tags:
+    - netology
+
+test:
+  stage: test
+  image: golang:1.17
+  script:
+    - go test .
+  tags:
+    - netology
+  rules:
+    - changes:
+        - "*.go"
+      when: always
+    - when: never

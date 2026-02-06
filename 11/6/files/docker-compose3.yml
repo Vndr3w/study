@@ -1,0 +1,42 @@
+services:
+  mysql-master-1:
+    image: mysql:8.0
+    container_name: mysql-master-1
+    command: >
+      --server-id=1
+      --log-bin=mysql-bin
+      --binlog-format=ROW
+      --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: toor
+      MYSQL_DATABASE: testdb
+    ports:
+      - "3306:3306"
+    volumes:
+      - master-1-data:/var/lib/mysql
+    networks:
+      - mysql-net
+
+  mysql-master-2:
+    image: mysql:8.0
+    container_name: mysql-master-2
+    command: >
+      --server-id=2
+      --log-bin=mysql-bin
+      --binlog-format=ROW
+      --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: toor
+      MYSQL_DATABASE: testdb
+    ports:
+      - "3307:3306"
+    volumes:
+      - master-2-data:/var/lib/mysql
+    networks:
+      - mysql-net
+
+volumes:
+  master-1-data:
+  master-2-data:
+networks:
+  mysql-net:
