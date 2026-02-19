@@ -6,7 +6,7 @@
 ## Требования к результату
 Погасите node exporter, стоящий на мониторинге, и прикрепите скриншот раздела оповещений Prometheus, где оповещение будет в статусе Pending
 
-![1](img/img1.png)
+![1](./img/img1.png)
 
 ## Задание 2
 Установите Alertmanager и интегрируйте его с Prometheus.
@@ -99,9 +99,9 @@
 ## Требования к результату
 Прикрепите скриншот Alerts из Prometheus, где правило оповещения будет в статусе Fireing, и скриншот из Alertmanager, где будет видно действующее правило оповещения
 
-![2.2](img/img2.2.png)
+![2.2](./img/img2.2.png)
 
-![2.3](img/img2.3.png)
+![2.3](./img/img2.3.png)
 
 ## Задание 3
 
@@ -130,9 +130,9 @@
 ## Требования к результату
 Приложите скриншот браузера с открытым эндпоинтом, а также скриншот списка таргетов из интерфейса Prometheus.*
 
-![3.1](img/img3.1.png)
+![3.1](./img/img3.1.png)
 
-![3.2](img/img3.2.png)
+![3.2](./img/img3.2.png)
 
 ## Задание 4*
 
@@ -140,8 +140,8 @@
 
 - Dashboards -> New -> Add visualization -> Data source (prometheus) -> Metric (engine_daemon_container_states_containers)
 
-![4.1](img/img4.1.png)
+![4.1](./img/img4.1.png)
 
-![4.2](img/img4.2.png)
+![4.2](./img/img4.2.png)
 
-![4.3](img/img4.3.png)
+![4.3](./img/img4.3.png)

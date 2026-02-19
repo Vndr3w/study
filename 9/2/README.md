@@ -73,11 +73,11 @@
     <details>
     <summary>Скриншоты и конфиг файл</summary>
 
-    - ![1.1](img/img1.1.png)
+    - ![1.1](./img/img1.1.png)
 
-    - ![1.2](img/img1.2.png)
+    - ![1.2](./img/img1.2.png)
 
-    - [Файл haproxy.cfg](files/haproxy_1.cfg)
+    - [Файл haproxy.cfg](./files/haproxy_1.cfg)
       </details>
 
 ## Задание 2
@@ -147,11 +147,11 @@
     <details>
     <summary>Скриншоты и конфиг файл</summary>
     
-    ![2.1](img/img2.1.png)
+    ![2.1](./img/img2.1.png)
 
-    ![2.2](img/img2.2.png)
+    ![2.2](./img/img2.2.png)
 
-    [Файл haproxy.cfg](files/haproxy_2.cfg)
+    [Файл haproxy.cfg](./files/haproxy_2.cfg)
     </details>
 
 # **Задания со звёздочками доделаю позже.**

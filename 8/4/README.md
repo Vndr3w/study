@@ -11,9 +11,9 @@
 - sudo mkdir /etc/prometheus
 - sudo mkdir /var/lib/prometheus
 
-![1.1](img/img1.1.png)
+![1.1](./img/img1.1.png)
 
-![1.2](img/img1.2.png)
+![1.2](./img/img1.2.png)
 
 3. Скачайте prometheus и в соответствии с лекцией разместите файлы в целевые директории
 
@@ -57,9 +57,9 @@
 - systemctl enable prometheus.service
 - sudo systemctl start prometheus.service
 
-![1.3](img/img1.3.png)
+![1.3](./img/img1.3.png)
 
-![1.4](img/img1.4.png)
+![1.4](./img/img1.4.png)
 
 ## Задание 2
 Установите Node Exporter.
@@ -103,7 +103,7 @@
 - sudo systemctl enable node-exporter.service
 - sudo systemctl start node-exporter.service
 
-![2](img/img2.png)
+![2](./img/img2.png)
 
 ## Задание 3
 Подключите Node Exporter к серверу Prometheus.
@@ -114,7 +114,7 @@
 
 - sudo nano /etc/prometheus/prometheus.yml
 
-![3.1](img/img3.1.png)
+![3.1](./img/img3.1.png)
 
 3. Перезапустите prometheus
 
@@ -122,7 +122,7 @@
 
 4. Проверьте что он запустился
 
-![3.2](img/img3.2.png)
+![3.2](./img/img3.2.png)
 
 ## Задание 4*
 Установите Grafana.
@@ -135,7 +135,7 @@
 - sudo systemctl enable grafana-server.service
 - sudo systemctl start grafana-server.service
 
-![4](img/img4.png)
+![4](./img/img4.png)
 
 ### Задание 5*
 Интегрируйте Grafana и Prometheus.
@@ -145,4 +145,4 @@
 - Dashboards -> Import
 - ID 1860
 
-![5](img/img5.png)
+![5](./img/img5.png)

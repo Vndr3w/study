@@ -42,7 +42,7 @@ sudo systemctl start memcached
 sudo systemctl status memcached
 ```
 
-![2](img/img2.png)
+![2](./img/img2.png)
 
 </details>
 
@@ -55,7 +55,7 @@ sudo systemctl status memcached
 
 - Есть поправка, TTL поставил больше, потому что при значении 5, оно слишком быстро удаляется. Принцип тот же, но с большим значением. Знаю, что правильная команда `set key1 0 5 5`, установил просто для удобства. И число байт увеличил на 1, чтобы было более удобночитаемо.
 
-![3](img/img3.png)
+![3](./img/img3.png)
 
 </details>
 
@@ -66,7 +66,7 @@ sudo systemctl status memcached
 <details>
 <summary>Скриншот</summary>
 
-![4](img/img4.png)
+![4](./img/img4.png)
 
 </details>
 
@@ -77,6 +77,6 @@ sudo systemctl status memcached
 <details>
 <summary>Скриншот</summary>
 
-![5](img/img5.png)
+![5](./img/img5.png)
 
 </details>
