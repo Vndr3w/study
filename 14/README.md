@@ -1,6 +1,6 @@
-<details>
-<summary>Ответ</summary>
+# Системы управления версиями
 
-
-
-</details>
+1. [Системы контроля версий](./1/README.md)
+2. [Основы Git](./2/README.md)
+3. [Ветвления в Git](./3/README.md)
+4. [Инструменты Git](./4/README.md)

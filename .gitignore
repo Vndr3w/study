@@ -1,38 +1,49 @@
-# Системные файлы Linux/Ubuntu
+# --- ОС и Редакторы ---
 .DS_Store
-*~
-.fuse_hidden*
-.directory
-.Trash-*
-.nfs*
-
-# Временные файлы редакторов
-*.swp
-*.swo
-*~
-*.tmp
-*.temp
-
-# Файлы IDE
-.vscode/
+Thumbs.db
 .idea/
-*.code-workspace
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
-# Python
-__pycache__/
-*.pyc
-.python-version
+# --- Секреты и Локальные конфиги ---
 .env
-venv/
-env/
+.env.*
+!.env.example
+*.pem
+*.key
+*.secret
+*.json.local
+.terraform/terraform.tfstate
+terraform.tfstate
+terraform.tfstate.backup
 
-# JavaScript/Node.js
-node_modules/
-npm-debug.log*
-
-# Логи
+# --- Логи и Временные файлы ---
 *.log
+*.log.*
+logs/
+temp/
+tmp/
 
-# Конфиденциальные данные
-.env
-.secret
+# --- Terraform, Ansible, Packer ---
+.terraform/
+.terraform.lock.hcl
+.ansible/
+.packer/
+*.tfvars
+*.tfvars.json
+
+# --- Виртуальные окружения и Зависимости ---
+.venv/
+venv/
+ENV/
+env/
+node_modules/
+__pycache__/
+
+# --- Документация/Отчеты ---
+*.pdf
+*.docx
