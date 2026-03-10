@@ -2,35 +2,55 @@
 
 **Этап 1: Подготовка окружения**
 
-- Установка и настройка необходимого ПО на вашей Ubuntu
+- Установка и настройка необходимого ПО
 
-<details>
-<summary>Ответ</summary>
+    <details>
+    <summary>Ответ</summary>
 
-```bash
-# Обновление пакетов
-sudo apt update && sudo apt upgrade -y
+    ```bash
+    # Обновление пакетов
+    sudo apt update && sudo apt upgrade -y
 
-# Установка Terraform
-wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
-echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
-sudo apt update && sudo apt install terraform -y
+    # Установка Terraform
+    # Скачиваем с зеркала нужную версию https://hashicorp-releases.yandexcloud.net/terraform/
 
-# Установка Ansible
-sudo apt install ansible -y
+    cd Downloads/ && unzip terraform_1.15.0-alpha20260218_linux_amd64.zip -d ./terraform
+    sudo cp ./terraform/terraform /usr/bin/terraform
+    sudo chmod +x /usr/bin/terraform 
+    cd && sudo nano .terraformrc
 
-# Установка yandex-cloud CLI
-curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
-# Перезапустите терминал или выполните: source ~/.bashrc
+    # Добавить в .terraformrc
 
-# Установка jq для работы с JSON
-sudo apt install jq -y
-```
+    provider_installation {
+        network_mirror {
+            url = "https://terraform-mirror.yandexcloud.net/"
+            include = ["registry.terraform.io/*/*"]
+        }
+        direct {
+            exclude = ["registry.terraform.io/*/*"]
+        }
+    }
 
-</details>
+    # Установка Ansible
+    sudo apt install ansible -y
+
+    # Установка yandex-cloud CLI
+    curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
+    # Перезапустите терминал или выполните: source ~/.bashrc
+
+    # Установка jq для работы с JSON
+    sudo apt install jq -y
+    ```
+
+    </details>
 
 - Настройка доступа к Yandex Cloud
+    - `yc init` следуем инструкции
+
+    ![1.1](../img/img1.1.png)
+
 - Создание структуры проекта
+    - `mkdir -p ~/project/{terraform,ansible,scripts} && cd ~/project`
 
 **Этап 2: Создание сети и security groups (Terraform)**
 
