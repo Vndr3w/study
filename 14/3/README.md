@@ -267,8 +267,10 @@ Fast-forward
 
 *В качестве результата работы по всем заданиям приложите [ссылку](https://github.com/Vndr3w/devops-netology) на .md-файл в вашем репозитории.*
 
-![Пошаговое выполнение](./files/step_by_step.md)
+[Пошаговое выполнение](./files/step_by_step.md)
 
 ![1.1](./img/img1.1.png)
+
+![1.2](./img/img1.2.png)
 
 </details>
