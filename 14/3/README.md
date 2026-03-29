@@ -1,5 +1,8 @@
 # Домашнее задание к занятию «Ветвления в Git» - Лукинов Андрей
 
+</details>
+<summary>Задание</summary>
+
 ## Задание «Ветвление, merge и rebase»  
 
 **Шаг 1.** Предположим, что есть задача — написать скрипт, выводящий на экран параметры его запуска. 
@@ -256,6 +259,8 @@ Fast-forward
  branching/rebase.sh | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 ```
+
+</details>
 
 <details>
 <summary>Ответ</summary>
