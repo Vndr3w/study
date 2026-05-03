@@ -378,4 +378,6 @@ docker ps -a
     ./terraform --version
     ```
 
+    ![11](../img/img11.png)
+
 </details>
