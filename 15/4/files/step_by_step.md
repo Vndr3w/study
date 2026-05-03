@@ -354,3 +354,28 @@ docker ps -a
 4. Проверить, что файл работает `chmod +x terraform` `./terraform version`
 
 </details>
+
+### 11. Fix
+
+<details>
+<summary>Ответ</summary>
+
+1. Создание контейнера (без запуска) `docker create --name temp-terraform hashicorp/terraform:latest`
+2. Сохранение файловой системы контейнера в архив `docker export temp-terraform -o terraform-filesystem.tar`
+3. Извлечение бинарного файла из архива:
+
+    ```bash
+    # Создаем папку для извлечения
+    mkdir extracted-fs
+
+    # Распаковываем tar архив в папку
+    tar -xf terraform-filesystem.tar -C extracted-fs
+
+    # Копируем бинарный файл в текущую директорию
+    cp extracted-fs/bin/terraform ./terraform
+
+    # Проверяем, что файл скопирован
+    ./terraform --version
+    ```
+
+</details>
