@@ -35,6 +35,12 @@ tmp/
 .packer/
 *.tfvars
 *.tfvars.json
+**/.terraform/*
+.terraform*
+!.terraformrc
+*.tfstate
+*.tfstate.*
+personal.auto.tfvars
 
 # --- Виртуальные окружения и Зависимости ---
 .venv/
