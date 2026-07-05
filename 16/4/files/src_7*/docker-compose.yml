@@ -1,0 +1,13 @@
+services:
+  vault:
+    image: hashicorp/vault:latest
+    container_name: vault-dev
+    cap_add:
+      - IPC_LOCK
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: education
+      VAULT_ADDR: http://0.0.0.0:8200
+    ports:
+      - "8200:8200"
+    volumes:
+      - ./vault/data:/vault/data
