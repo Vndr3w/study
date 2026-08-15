@@ -36,7 +36,11 @@
 <details>
 <summary>Ответ</summary>
 
+[Роль Vector](https://github.com/Vndr3w/vector-role)
 
+[Роль Lighthouse](https://github.com/Vndr3w/lighthouse-role)
+
+[Playbook](https://github.com/Vndr3w/study/tree/main/17/4/files/ansible-lab/playbook)
 
 </details>
 </details>
