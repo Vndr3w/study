@@ -1,0 +1,38 @@
+---
+- name: Deploy ClickHouse
+  hosts: clickhouse
+  become: yes
+  pre_tasks:
+    - name: Install gnupg and apt-transport-https
+      ansible.builtin.apt:
+        name:
+          - gnupg
+          - apt-transport-https
+        state: present
+        update_cache: yes
+  roles:
+    - clickhouse
+
+- name: Deploy Vector
+  hosts: vector
+  become: yes
+  roles:
+    - vector-role
+  vars:
+    vector_config_sources:
+      demo_logs:
+        type: demo_logs
+        format: json
+        interval: 1
+    vector_config_sinks:
+      console:
+        type: console
+        inputs: ["demo_logs"]
+        encoding:
+          codec: json
+
+- name: Deploy Lighthouse
+  hosts: lighthouse
+  become: yes
+  roles:
+    - lighthouse-role
