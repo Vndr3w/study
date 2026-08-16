@@ -208,7 +208,7 @@ if __name__ == '__main__':
 
 ![16](./img/img16.png)
 
-**Шаг 17.** В ответ необходимо прислать ссылки на [collection](https://github.com/Vndr3w/my_own_collection) и [tar.gz архив](./files/my_own_namespace/yandex_cloud_elk/my_own_namespace-yandex_cloud_elk-1.0.0.tar.gz), а также скриншоты выполнения пунктов 4, 6, 15 и 16.
+**Шаг 17.** В ответ необходимо прислать ссылки на [collection](https://github.com/Vndr3w/my_own_collection) и [tar.gz архив](./files/my_own_namespace-yandex_cloud_elk-1.0.0.tar.gz), а также скриншоты выполнения пунктов 4, 6, 15 и 16.
 
 ## Необязательная часть
 
