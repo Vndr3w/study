@@ -1,0 +1,18 @@
+---
+- name: Test my own module
+  hosts: localhost
+  tasks:
+    - name: Create a test file
+      my_own_module:
+        path: /tmp/test_file.txt
+        content: "Hello, this is test content"
+      register: result
+
+    - name: Show result
+      debug:
+        var: result
+
+    - name: Create another file
+      my_own_module:
+        path: /tmp/another_file.txt
+        content: "Another file content"
