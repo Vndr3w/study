@@ -1,6 +1,7 @@
-<details>
-<summary>Ответ</summary>
+# Мониторинг и логи
 
-
-
-</details>
+1. [Системы мониторинга](./1/README.md) [ ]
+2. [Средство визуализации Grafana](./2/README.md) [ ]
+3. [Система сбора логов Elastic Stack](./3/README.md) [ ]
+4. [Платформа мониторинга Sentry](./4/README.md) [ ]
+5. [Инцидент-менеджмент](./5/README.md) [ ]
