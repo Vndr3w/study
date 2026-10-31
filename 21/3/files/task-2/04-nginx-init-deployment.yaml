@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-init
+  namespace: homework
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-init
+  template:
+    metadata:
+      labels:
+        app: nginx-init
+    spec:
+      initContainers:
+        - name: wait-for-service
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              SERVICE="nginx-init-service.${POD_NAMESPACE}.svc.cluster.local"
+              echo "Waiting for Service: ${SERVICE}"
+              until nslookup "${SERVICE}"; do
+                echo "Service is not available yet. Retrying in 2 seconds..."
+                sleep 2
+              done
+              echo "Service found. Init container completed."
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+      containers:
+        - name: nginx
+          image: nginx:stable
+          ports:
+            - name: http
+              containerPort: 80
