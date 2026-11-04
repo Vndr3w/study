@@ -1,0 +1,78 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: homework-local
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: sc-pv
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: homework-local
+  hostPath:
+    path: /mnt/k8s-storage/storageclass
+    type: Directory
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sc-pvc
+spec:
+  storageClassName: homework-local
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-exchange-sc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: data-exchange-sc
+  template:
+    metadata:
+      labels:
+        app: data-exchange-sc
+    spec:
+      containers:
+        - name: busybox
+          image: busybox:1.37
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              while true; do
+                date -u '+%Y-%m-%dT%H:%M:%SZ' >> /shared/data.txt
+                sleep 5
+              done
+          volumeMounts:
+            - name: shared-data
+              mountPath: /shared
+
+        - name: multitool
+          image: wbitt/network-multitool:latest
+          volumeMounts:
+            - name: shared-data
+              mountPath: /shared
+              readOnly: true
+
+      volumes:
+        - name: shared-data
+          persistentVolumeClaim:
+            claimName: sc-pvc
