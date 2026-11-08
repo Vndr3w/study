@@ -1,7 +1,7 @@
 # Troubleshooting
 
 <details>
-<summary>Ответ</summary>
+<summary><b>Ответ</b></summary>
 
 
 
